@@ -2,6 +2,9 @@ use axum::{routing::get, Router};
 use std::env;
 
 mod handlers;
+mod models;
+mod repositories;
+mod schemas;
 mod state;
 
 use handlers::health::health_check;
@@ -26,7 +29,6 @@ async fn main() {
         .with_state(app_state);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-
     println!("Server running on http://localhost:3000");
 
     axum::serve(listener, app).await.unwrap();
