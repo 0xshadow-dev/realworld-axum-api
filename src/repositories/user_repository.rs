@@ -1,5 +1,5 @@
 use crate::models::User;
-use sqlx::{PgPool, Row};
+use sqlx::PgPool;
 use uuid::Uuid;
 
 #[derive(Clone)]
