@@ -24,3 +24,7 @@ chrono = { version = "0.4", features = ["serde"] }
 
 # Configuration
 dotenvy = "0.15"
+
+# Auth
+bcrypt = "0.15"
+jsonwebtoken = "9.0"
