@@ -5,10 +5,10 @@ use axum::{
 };
 use uuid::Uuid;
 
-// For protected routes
+// For protected routes - requires valid JWT
 pub struct RequireAuth(pub User);
 
-// For optional auth
+// For optional auth - extracts user if token present
 pub struct OptionalAuth(pub Option<User>);
 
 impl<S> FromRequestParts<S> for RequireAuth

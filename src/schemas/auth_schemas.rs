@@ -8,11 +8,17 @@ pub struct RegisterUserRequest {
 
 #[derive(Debug, Deserialize, Validate)]
 pub struct RegisterUserData {
-    #[validate(length(min = 3, max = 50))]
+    #[validate(length(
+        min = 3,
+        max = 50,
+        message = "Username must be between 3 and 50 characters"
+    ))]
     pub username: String,
-    #[validate(email)]
+
+    #[validate(email(message = "Invalid email format"))]
     pub email: String,
-    #[validate(length(min = 8))]
+
+    #[validate(length(min = 8, message = "Password must be at least 8 characters"))]
     pub password: String,
 }
 
@@ -23,9 +29,10 @@ pub struct LoginUserRequest {
 
 #[derive(Debug, Deserialize, Validate)]
 pub struct LoginUserData {
-    #[validate(email)]
+    #[validate(email(message = "Invalid email format"))]
     pub email: String,
-    #[validate(length(min = 1))]
+
+    #[validate(length(min = 1, message = "Password is required"))]
     pub password: String,
 }
 
@@ -41,4 +48,16 @@ pub struct UserData {
     pub username: String,
     pub bio: String,
     pub image: Option<String>,
+}
+
+impl UserData {
+    pub fn from_user_with_token(user: crate::models::User, token: String) -> Self {
+        Self {
+            email: user.email,
+            token,
+            username: user.username,
+            bio: user.bio.unwrap_or_default(), // Empty string if None
+            image: user.image,                 // Keep as Option<String>
+        }
+    }
 }
