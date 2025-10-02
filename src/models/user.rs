@@ -11,6 +11,7 @@ pub struct User {
     pub password_hash: String,
     pub bio: Option<String>,
     pub image: Option<String>,
+    pub email_verified: bool,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }

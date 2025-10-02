@@ -36,6 +36,33 @@ pub struct LoginUserData {
     pub password: String,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct UpdateUserRequest {
+    pub user: UpdateUserData,
+}
+
+#[derive(Debug, Deserialize, Validate)]
+pub struct UpdateUserData {
+    #[validate(length(
+        min = 3,
+        max = 50,
+        message = "Username must be between 3 and 50 characters"
+    ))]
+    pub username: Option<String>,
+
+    #[validate(email(message = "Invalid email format"))]
+    pub email: Option<String>,
+
+    #[validate(length(min = 8, message = "Password must be at least 8 characters"))]
+    pub password: Option<String>,
+
+    #[validate(length(max = 500, message = "Bio cannot exceed 500 characters"))]
+    pub bio: Option<String>,
+
+    #[validate(url(message = "Image must be a valid URL"))]
+    pub image: Option<String>,
+}
+
 #[derive(Debug, Serialize)]
 pub struct UserResponse {
     pub user: UserData,
@@ -48,6 +75,7 @@ pub struct UserData {
     pub username: String,
     pub bio: String,
     pub image: Option<String>,
+    pub email_verified: bool,
 }
 
 impl UserData {
@@ -56,8 +84,9 @@ impl UserData {
             email: user.email,
             token,
             username: user.username,
-            bio: user.bio.unwrap_or_default(), // Empty string if None
-            image: user.image,                 // Keep as Option<String>
+            bio: user.bio.unwrap_or_default(),
+            image: user.image,
+            email_verified: user.email_verified,
         }
     }
 }
