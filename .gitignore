@@ -1,3 +1,5 @@
 /target
 .env
 .DS_STORE
+rust_analyzer
+rust-analyzer
