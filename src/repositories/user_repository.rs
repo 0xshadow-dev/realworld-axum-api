@@ -118,4 +118,24 @@ impl UserRepositoryTrait for UserRepository {
 
         Ok(user)
     }
+
+    async fn update_password(
+        &self,
+        user_id: Uuid,
+        new_password_hash: &str,
+    ) -> Result<(), sqlx::Error> {
+        sqlx::query(
+            r#"
+            UPDATE users
+            SET password_hash = $2
+            WHERE id = $1
+            "#,
+        )
+        .bind(user_id)
+        .bind(new_password_hash)
+        .execute(&self.db)
+        .await?;
+
+        Ok(())
+    }
 }
