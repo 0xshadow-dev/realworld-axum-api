@@ -1,6 +1,7 @@
 use crate::repositories::{
     EmailVerificationRepository, EmailVerificationRepositoryTrait, PasswordResetRepository,
-    PasswordResetRepositoryTrait, UserRepository, UserRepositoryTrait,
+    PasswordResetRepositoryTrait, RefreshTokenRepository, RefreshTokenRepositoryTrait,
+    UserRepository, UserRepositoryTrait,
 };
 use crate::services::EmailService;
 use axum::extract::FromRef;
@@ -13,6 +14,7 @@ pub struct AppState {
     pub user_repository: Arc<dyn UserRepositoryTrait>,
     pub email_verification_repository: Arc<dyn EmailVerificationRepositoryTrait>,
     pub password_reset_repository: Arc<dyn PasswordResetRepositoryTrait>,
+    pub refresh_token_repository: Arc<dyn RefreshTokenRepositoryTrait>,
     pub email_service: Arc<EmailService>,
 }
 
@@ -30,6 +32,9 @@ impl AppState {
         let password_reset_repository: Arc<dyn PasswordResetRepositoryTrait> =
             Arc::new(PasswordResetRepository::new(db.clone()));
 
+        let refresh_token_repository: Arc<dyn RefreshTokenRepositoryTrait> =
+            Arc::new(RefreshTokenRepository::new(db.clone()));
+
         println!("Initializing email service...");
         let email_service = match EmailService::new() {
             Ok(service) => Arc::new(service),
@@ -45,6 +50,7 @@ impl AppState {
             user_repository,
             email_verification_repository,
             password_reset_repository,
+            refresh_token_repository,
             email_service,
         })
     }
