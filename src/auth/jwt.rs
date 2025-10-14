@@ -12,7 +12,9 @@ pub struct Claims {
 
 pub fn generate_token(user_id: &Uuid, secret: &str) -> Result<String, jsonwebtoken::errors::Error> {
     let now = Utc::now();
-    let exp = (now + Duration::hours(24)).timestamp() as usize;
+
+    // Changed from 24 hours to 15 minutes
+    let exp = (now + Duration::minutes(15)).timestamp() as usize;
     let iat = now.timestamp() as usize;
 
     let claims = Claims {
@@ -27,7 +29,6 @@ pub fn generate_token(user_id: &Uuid, secret: &str) -> Result<String, jsonwebtok
         &EncodingKey::from_secret(secret.as_ref()),
     )
 }
-
 pub fn validate_token(token: &str, secret: &str) -> Result<Claims, jsonwebtoken::errors::Error> {
     decode::<Claims>(
         token,
